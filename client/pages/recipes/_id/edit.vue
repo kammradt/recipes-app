@@ -1,5 +1,5 @@
 <template>
   <h1>
-    app index
+    edit recipe
   </h1>
 </template>

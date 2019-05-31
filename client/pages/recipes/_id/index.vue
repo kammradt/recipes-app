@@ -1,5 +1,5 @@
 <template>
   <h1>
-    app index
+    index of _id
   </h1>
 </template>
