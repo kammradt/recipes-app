@@ -20,95 +20,39 @@
 <script>
 import RecipeCard from '~/components/RecipeCard.vue'
 
-const sampleData = [
-  {
-    id: 1,
-    name: 'Jollof Rice',
-    picture: '/images/food-1.jpeg',
-    ingredients: 'Beef, Tomato, Spinach',
-    difficulty: 'easy',
-    prep_time: 15,
-    prep_guide:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Omnis, porro. Dignissimos ducimus ratione totam fugit officiis blanditiis exercitationem, nisi vero architecto quibusdam impedit, earum '
-  },
-  {
-    id: 2,
-    name: 'Macaroni',
-    picture: '/images/food-2.jpeg',
-    ingredients: 'Beef, Tomato, Spinach',
-    difficulty: 'easy',
-    prep_time: 15,
-    prep_guide:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Omnis, porro. Dignissimos ducimus ratione totam fugit officiis blanditiis exercitationem, nisi vero architecto quibusdam impedit, earum '
-  },
-  {
-    id: 3,
-    name: 'Fried Rice',
-    picture: '/images/banner.jpg',
-    ingredients: 'Beef, Tomato, Spinach',
-    difficulty: 'easy',
-    prep_time: 15,
-    prep_guide:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Omnis, porro. Dignissimos ducimus ratione totam fugit officiis blanditiis exercitationem, nisi vero architecto quibusdam impedit, earum '
-  },
-  {
-    id: 4,
-    name: 'Fried Rice',
-    picture: '/images/banner.jpg',
-    ingredients: 'Beef, Tomato, Spinach',
-    difficulty: 'easy',
-    prep_time: 15,
-    prep_guide:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Omnis, porro. Dignissimos ducimus ratione totam fugit officiis blanditiis exercitationem, nisi vero architecto quibusdam impedit, earum '
-  },
-  {
-    id: 5,
-    name: 'Fried Rice',
-    picture: '/images/banner.jpg',
-    ingredients: 'Beef, Tomato, Spinach',
-    difficulty: 'easy',
-    prep_time: 15,
-    prep_guide:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Omnis, porro. Dignissimos ducimus ratione totam fugit officiis blanditiis exercitationem, nisi vero architecto quibusdam impedit, earum '
-  },
-  {
-    id: 6,
-    name: 'Fried Rice',
-    picture: '/images/banner.jpg',
-    ingredients: 'Beef, Tomato, Spinach',
-    difficulty: 'easy',
-    prep_time: 15,
-    prep_guide:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Omnis, porro. Dignissimos ducimus ratione totam fugit officiis blanditiis exercitationem, nisi vero architecto quibusdam impedit, earum '
-  }
-]
-
 export default {
-  head() {
-    return {
-      title: 'Recipes more than top'
-    }
-  },
   components: {
     RecipeCard
+  },
+  head() {
+    return {
+      title: 'Recipes list'
+    }
   },
   data() {
     return {
       recipes: []
     }
   },
-  asyncData(context) {
-    const data = sampleData
-    return {
-      recipes: data
+  async asyncData({ $axios, params }) {
+    try {
+      const recipes = await $axios.$get(`/recipes/`)
+      return { recipes }
+    } catch (e) {
+      return { recipes: [] }
     }
   },
   methods: {
-    deleteRecipe(RecipeId) {
-      // eslint-disable-next-line no-console
-      console.log(`deleted ${RecipeId}`)
+    async deleteRecipe(RecipeId) {
+      try {
+        await this.$axios.$delete(`/recipes/${RecipeId}/`) // delete recipe
+        const newRecipes = await this.$axios.$get('/recipes/') // get new list of recipes
+        this.recipes = newRecipes // update list of recipes
+      } catch (e) {
+        // eslint-disable-next-line no-console
+        console.log(e)
+      }
     }
   }
 }
 </script>
-<style scoped></style>
