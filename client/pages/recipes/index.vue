@@ -86,7 +86,7 @@ const sampleData = [
 export default {
   head() {
     return {
-      title: 'Recipes list'
+      title: 'Recipes more than top'
     }
   },
   components: {

@@ -1,7 +1,8 @@
 <template>
-  <v-flex xs12 md4 lg3 pa-2>
+  <v-flex xs12 md4 lg3 pl-3 pr-3 pb-4>
     <v-card hover>
       <v-img :src="recipe.picture" height="200px" />
+
       <v-card-title>
         <p class="font-weight-medium headline">{{ recipe.name }}</p>
       </v-card-title>
