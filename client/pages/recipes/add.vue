@@ -1,5 +1,6 @@
 <template>
   <v-app>
+    <MainToolbar />
     <v-flex pa-1 text-xs-center display-3 v-text="recipe.name" />
     <v-layout justify-space-around row wrap fill-height>
       <v-flex text-xs-center xs12 md6 pa-1 pt-5>
@@ -64,7 +65,12 @@
 </template>
 
 <script>
+import MainToolbar from '~/components/MainToolbar'
+
 export default {
+  components: {
+    MainToolbar
+  },
   head() {
     return {
       title: 'Add Recipe'
