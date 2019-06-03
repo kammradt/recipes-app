@@ -95,7 +95,7 @@ export default {
         ],
         recipePreparationGuideRule: [
           v => v.length >= 10 || 'Minimum length is 10 characters',
-          v => v.length <= 400 || 'Maximum length is 600 characters'
+          v => v.length <= 600 || 'Maximum length is 600 characters'
         ]
       },
       difficultyOptions: ['Easy', 'Medium', 'Hard']
