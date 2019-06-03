@@ -1,30 +1,19 @@
 <template>
   <v-app>
     <v-flex pa-1 text-xs-center display-3 v-text="recipe.name" />
-    <v-layout justify-space-around row fill-height>
-      <v-flex xs12 md6 pa-1 pt-5>
-        <img
-          v-if="!preview"
-          class="img-fluid"
-          style="width: 400px; border-radius: 10px; box-shadow: 0 1rem 1rem rgba(0,0,0,.7);"
-          :src="recipe.picture"
-        />
-        <img
-          v-else
-          class="img-fluid"
-          style="width: 400px; border-radius: 10px; box-shadow: 0 1rem 1rem rgba(0,0,0,.7);"
-          :src="preview"
-        />
+    <v-layout justify-space-around row wrap fill-height>
+      <v-flex text-xs-center xs12 md6 pa-1 pt-5>
+        <img v-if="preview" style="width: 400px;" :src="preview" />
       </v-flex>
 
       <v-flex xs12 md6 pa-1 pt-5>
-        {{ recipe }}
         <v-form @submit.prevent="submitRecipe">
           <v-text-field
             v-model="recipe.name"
             :counter="120"
             type="text"
             label="Recipe name"
+            :rules="rules"
             required
           />
 
@@ -36,6 +25,7 @@
             required
           />
 
+          <span pb-3 body-1 v-text="'Food picture'" />
           <input label="Food picture" type="file" @change="onFileChange" />
 
           <v-select
@@ -46,7 +36,7 @@
           />
 
           <label for>
-            Prep time
+            Preperation time
             <small>
               (
               <input v-model="recipe.preparation_time" type="number" />
@@ -62,7 +52,7 @@
             required
           />
 
-          <v-btn type="submit">Save</v-btn>
+          <v-btn color="primary" type="submit">Save</v-btn>
         </v-form>
       </v-flex>
     </v-layout>
@@ -79,7 +69,7 @@ export default {
   data() {
     return {
       recipe: {
-        name: ' ',
+        name: '',
         picture: '',
         ingredients: '',
         difficulty: '',
@@ -87,7 +77,10 @@ export default {
         preparation_guide: ''
       },
       preview: '',
-      difficultyOptions: ['Easy', 'Medium', 'Hard']
+      difficultyOptions: ['Easy', 'Medium', 'Hard'],
+      rules: {
+        required: value => !!value || 'Required.'
+      }
     }
   },
   methods: {
@@ -100,7 +93,6 @@ export default {
       this.createImage(files[0])
     },
     createImage(file) {
-      // let image = new Image();
       const reader = new FileReader()
       const vm = this
       reader.onload = e => {
