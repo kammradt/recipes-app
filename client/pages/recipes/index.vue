@@ -1,13 +1,6 @@
 <template>
   <v-app>
-    <v-toolbar dark class="primary" flat>
-      <v-toolbar-title>Receitinhas top</v-toolbar-title>
-      <v-spacer />
-      <nuxt-link to="/recipes/add">
-        <v-btn outline>Add</v-btn>
-      </nuxt-link>
-    </v-toolbar>
-    <br />
+    <MainToolbar />
     <v-layout align-start justify-start row wrap>
       <template v-for="recipe in recipes">
         <RecipeCard :key="recipe.id" :on-delete="deleteRecipe" :recipe="recipe">
@@ -18,10 +11,12 @@
 </template>
 
 <script>
-import RecipeCard from '~/components/RecipeCard.vue'
+import RecipeCard from '~/components/RecipeCard'
+import MainToolbar from '~/components/MainToolbar'
 
 export default {
   components: {
+    MainToolbar,
     RecipeCard
   },
   head() {
@@ -31,7 +26,7 @@ export default {
   },
   data() {
     return {
-      recipes: []
+      recipes: [{ teste: 'teste' }]
     }
   },
   async asyncData({ $axios, params }) {
