@@ -18,45 +18,52 @@
       </v-flex>
 
       <v-flex xs12 md6 pa-1 pt-5>
-        <form @submit.prevent="submitRecipe">
-          <label for>Recipe Name</label>
-          <input v-model="recipe.name" type="text" />
-          <div class="form-group">
-            <label for>Ingredients</label>
-            <input
-              v-model="recipe.ingredients"
-              type="text"
-              name="Ingredients"
-            />
-          </div>
-          <div>
-            <label for>Food picture</label>
-            <input type="file" @change="onFileChange" />
-          </div>
-          <div>
-            <label for>Difficulty</label>
-            <select v-model="recipe.difficulty" class="form-control">
-              <option value="Easy">Easy</option>
-              <option value="Medium">Medium</option>
-              <option value="Hard">Hard</option>
-            </select>
-            <label for>
-              Prep time
-              <small>(minutes)</small>
-            </label>
-            <input
-              v-model="recipe.prep_time"
-              type="text"
-              class="form-control"
-              name="Ingredients"
-            />
-          </div>
-          <div>
-            <label for>Preparation guide</label>
-            <textarea v-model="recipe.prep_guide" rows="8"></textarea>
-          </div>
+        {{ recipe }}
+        <v-form @submit.prevent="submitRecipe">
+          <v-text-field
+            v-model="recipe.name"
+            :counter="120"
+            type="text"
+            label="Recipe name"
+            required
+          />
+
+          <v-text-field
+            v-model="recipe.ingredients"
+            :counter="400"
+            type="text"
+            label="Ingredients"
+            required
+          />
+
+          <input label="Food picture" type="file" @change="onFileChange" />
+
+          <v-select
+            v-model="recipe.difficulty"
+            :items="difficultyOptions"
+            label="Difficulty"
+            required
+          />
+
+          <label for>
+            Prep time
+            <small>
+              (
+              <input v-model="recipe.preparation_time" type="number" />
+              minutes)</small
+            >
+          </label>
+          <v-slider v-model="recipe.preparation_time" max="600" />
+
+          <v-textarea
+            v-model="recipe.preparation_guide"
+            label="Preparation guide"
+            hint="Describe how to prepare your recipe here!"
+            required
+          />
+
           <v-btn type="submit">Save</v-btn>
-        </form>
+        </v-form>
       </v-flex>
     </v-layout>
   </v-app>
@@ -76,10 +83,11 @@ export default {
         picture: '',
         ingredients: '',
         difficulty: '',
-        prep_time: null,
-        prep_guide: ''
+        preparation_time: 5,
+        preparation_guide: ''
       },
-      preview: ''
+      preview: '',
+      difficultyOptions: ['Easy', 'Medium', 'Hard']
     }
   },
   methods: {
@@ -113,7 +121,8 @@ export default {
         const response = await this.$axios.$post('/recipes/', formData, config)
         this.$router.push('/recipes/')
       } catch (e) {
-        // console.log(e);
+        // eslint-disable-next-line no-console
+        console.log(e)
       }
     }
   }
