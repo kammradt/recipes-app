@@ -13,7 +13,7 @@
             :counter="120"
             type="text"
             label="Recipe name"
-            :rules="rules"
+            :rules="rules.recipeNameRule"
             required
           />
 
@@ -22,6 +22,7 @@
             :counter="400"
             type="text"
             label="Ingredients"
+            :rules="rules.recipeIngredientsRule"
             required
           />
 
@@ -32,6 +33,7 @@
             v-model="recipe.difficulty"
             :items="difficultyOptions"
             label="Difficulty"
+            :rules="rules.recipeDifficultyRule"
             required
           />
 
@@ -49,6 +51,8 @@
             v-model="recipe.preparation_guide"
             label="Preparation guide"
             hint="Describe how to prepare your recipe here!"
+            :counter="600"
+            :rules="rules.recipePreparationGuideRule"
             required
           />
 
@@ -77,10 +81,24 @@ export default {
         preparation_guide: ''
       },
       preview: '',
-      difficultyOptions: ['Easy', 'Medium', 'Hard'],
       rules: {
-        required: value => !!value || 'Required.'
-      }
+        recipeNameRule: [
+          v => v.length >= 5 || 'Minimum length is 5 characters',
+          v => v.length <= 120 || 'Maximum length is 120 characters'
+        ],
+        recipeIngredientsRule: [
+          v => v.length >= 10 || 'Minimum length is 10 characters',
+          v => v.length <= 400 || 'Maximum length is 400 characters'
+        ],
+        recipeDifficultyRule: [
+          v => v !== '' || 'Select how difficult your recipe is'
+        ],
+        recipePreparationGuideRule: [
+          v => v.length >= 10 || 'Minimum length is 10 characters',
+          v => v.length <= 400 || 'Maximum length is 600 characters'
+        ]
+      },
+      difficultyOptions: ['Easy', 'Medium', 'Hard']
     }
   },
   methods: {
