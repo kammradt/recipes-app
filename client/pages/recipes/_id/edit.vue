@@ -4,11 +4,8 @@
     <v-flex pa-1 text-xs-center display-3 v-text="recipe.name" />
     <v-layout justify-space-around row wrap fill-height>
       <v-flex text-xs-center xs12 md6 pa-1 pt-5>
-        <img
-          v-if="recipe.picture"
-          style="width: 400px;"
-          :src="recipe.picture"
-        />
+        <img v-if="!preview" style="width: 400px;" :src="recipe.picture" />
+        <img else style="width: 400px;" :src="preview" />
       </v-flex>
       <v-flex xs12 md6 pa-1 pt-5>
         <v-form @submit.prevent="submitRecipe">
