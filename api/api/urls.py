@@ -22,8 +22,8 @@ from rest_framework_jwt.views import obtain_jwt_token
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/git ', include('core.urls')),
-    url(r'^login/', obtain_jwt_token),
+    path('api/', include('core.urls')),
+    url('api/login/', obtain_jwt_token),
 
 ]
 
