@@ -126,7 +126,10 @@ export default {
     },
     async submitRecipe() {
       const config = {
-        headers: { 'content-type': 'multipart/form-data' }
+        headers: {
+          'content-type': 'multipart/form-data',
+          Authorization: `JWT ${this.$store.getters.token}`
+        }
       }
       const formData = new FormData()
       for (const data in this.recipe) {
