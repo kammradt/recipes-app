@@ -107,9 +107,13 @@ export default {
       difficultyOptions: ['Easy', 'Medium', 'Hard']
     }
   },
-  async asyncData({ $axios, params }) {
+  async asyncData({ $axios, params, store }) {
     try {
-      const recipe = await $axios.$get(`/recipes/${params.id}`)
+      const recipe = await $axios.$get(`/recipes/${params.id}`, {
+        headers: {
+          Authorization: `JWT ${store.getters.token}`
+        }
+      })
       return { recipe }
     } catch (e) {
       return { recipe: [] }
@@ -138,7 +142,10 @@ export default {
         delete editedRecipe.picture
       }
       const config = {
-        headers: { 'content-type': 'multipart/form-data' }
+        headers: {
+          'content-type': 'multipart/form-data',
+          Authorization: `JWT ${this.$store.getters.token}`
+        }
       }
       const formData = new FormData()
       for (const data in editedRecipe) {
