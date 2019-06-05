@@ -45,8 +45,13 @@ export default {
   methods: {
     async deleteRecipe(RecipeId) {
       try {
-        await this.$axios.$delete(`/recipes/${RecipeId}/`)
-        const newRecipes = await this.$axios.$get('/recipes/')
+        const headers = {
+          headers: {
+            Authorization: `JWT ${this.$store.getters.token}`
+          }
+        }
+        await this.$axios.$delete(`/recipes/${RecipeId}/`, headers)
+        const newRecipes = await this.$axios.$get('/recipes/', headers)
         this.recipes = newRecipes
       } catch (e) {
         // eslint-disable-next-line no-console
