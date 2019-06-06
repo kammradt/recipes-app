@@ -125,19 +125,14 @@ export default {
       reader.readAsDataURL(file)
     },
     async submitRecipe() {
-      const config = {
-        headers: {
-          'content-type': 'multipart/form-data',
-          Authorization: `JWT ${this.$store.getters.token}`
-        }
-      }
-      const formData = new FormData()
+      const form = new FormData()
       for (const data in this.recipe) {
-        formData.append(data, this.recipe[data])
+        form.append(data, this.recipe[data])
       }
       try {
+        const headers = { Authorization: `JWT ${this.$store.getters.token}` }
         // eslint-disable-next-line no-unused-vars
-        const response = await this.$axios.$post('/recipes/', formData, config)
+        const response = await this.$axios.$post('/recipes/', form, { headers })
         this.$router.push('/recipes/')
       } catch (e) {
         // eslint-disable-next-line no-console

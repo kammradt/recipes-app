@@ -26,17 +26,13 @@ export default {
   },
   data() {
     return {
-      recipes: [],
-      token: this.$store.getters.token
+      recipes: []
     }
   },
   async asyncData({ $axios, params, store }) {
     try {
-      const recipes = await $axios.$get(`/recipes/`, {
-        headers: {
-          Authorization: `JWT ${store.getters.token}`
-        }
-      })
+      const headers = { Authorization: `JWT ${store.getters.token}` }
+      const recipes = await $axios.$get(`/recipes/`, { headers })
       return { recipes }
     } catch (e) {
       return { recipes: [] }
@@ -45,13 +41,10 @@ export default {
   methods: {
     async deleteRecipe(RecipeId) {
       try {
-        const headers = {
-          headers: {
-            Authorization: `JWT ${this.$store.getters.token}`
-          }
-        }
-        await this.$axios.$delete(`/recipes/${RecipeId}/`, headers)
-        const newRecipes = await this.$axios.$get('/recipes/', headers)
+        const headers = { Authorization: `JWT ${this.$store.getters.token}` }
+        await this.$axios.$delete(`/recipes/${RecipeId}/`, { headers })
+
+        const newRecipes = await this.$axios.$get('/recipes/', { headers })
         this.recipes = newRecipes
       } catch (e) {
         // eslint-disable-next-line no-console

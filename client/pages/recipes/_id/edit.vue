@@ -108,12 +108,9 @@ export default {
     }
   },
   async asyncData({ $axios, params, store }) {
+    const headers = { Authorization: `JWT ${store.getters.token}` }
     try {
-      const recipe = await $axios.$get(`/recipes/${params.id}`, {
-        headers: {
-          Authorization: `JWT ${store.getters.token}`
-        }
-      })
+      const recipe = await $axios.$get(`/recipes/${params.id}`, { headers })
       return { recipe }
     } catch (e) {
       return { recipe: [] }
