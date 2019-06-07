@@ -54,7 +54,7 @@ def token_required(f):
     return decorated
 
 
-@app.route('/api/user', methods=['GET'])
+@app.route('/user', methods=['GET'])
 @token_required
 def get_all_users(current_user):
     if not current_user.is_admin:
@@ -70,12 +70,9 @@ def get_all_users(current_user):
     return jsonify({'users': response})
 
 
-@app.route('/api/user/<public_id>', methods=['GET'])
+@app.route('/user/<public_id>', methods=['GET'])
 @token_required
 def get_user(current_user, public_id):
-    if not current_user.is_admin:
-        return jsonify({'message': 'Cannot perform this call!'})
-
     user = User.query.filter_by(public_id=public_id).first()
 
     if not user:
@@ -86,7 +83,7 @@ def get_user(current_user, public_id):
     return jsonify({'user': user_data})
 
 
-@app.route('/api/user', methods=['POST'])
+@app.route('/user', methods=['POST'])
 def create_user():
     post_data = request.get_json()
 
@@ -100,12 +97,9 @@ def create_user():
     return jsonify({'message': 'New user created!'})
 
 
-@app.route('/api/user/<public_id>', methods=['PUT'])
+@app.route('/user/<public_id>', methods=['PUT'])
 @token_required
 def update_user(current_user, public_id):
-    if not current_user.is_admin:
-        return jsonify({'message': 'Cannot perform this call!'})
-
     user = User.query.filter_by(public_id=public_id).first()
     if not user:
         return jsonify({'message': 'No user found!'})
@@ -118,7 +112,7 @@ def update_user(current_user, public_id):
     return jsonify({'message': 'User updated!'})
 
 
-@app.route('/api/user/<public_id>', methods=['DELETE'])
+@app.route('/user/<public_id>', methods=['DELETE'])
 @token_required
 def delete_user(current_user, public_id):
     if not current_user.is_admin:
@@ -134,7 +128,7 @@ def delete_user(current_user, public_id):
     return jsonify({'message': 'User deleted!'})
 
 
-@app.route('/api/recipe', methods=['GET'])
+@app.route('/recipe', methods=['GET'])
 @token_required
 def get_all_recipes(current_user):
     recipes = Recipe.query.filter_by(user_id=current_user.id).all()
@@ -152,7 +146,7 @@ def get_all_recipes(current_user):
     return jsonify({'recipes': response})
 
 
-@app.route('/api/recipe/<recipe_id>', methods=['GET'])
+@app.route('/recipe/<recipe_id>', methods=['GET'])
 @token_required
 def get_recipe(current_user, recipe_id):
     recipe = Recipe.query.filter_by(id=recipe_id, user_id=current_user.id).first()
@@ -173,7 +167,7 @@ def get_recipe(current_user, recipe_id):
     return jsonify({'recipe': recipe_data})
 
 
-@app.route('/api/recipe/', methods=['POST'])
+@app.route('/recipe/', methods=['POST'])
 @token_required
 def create_recipe(current_user):
     data = request.get_json()
@@ -193,7 +187,7 @@ def create_recipe(current_user):
     return jsonify({'message': 'New recipe added!'})
 
 
-@app.route('/api/recipe/<recipe_id>', methods=['PUT'])
+@app.route('/recipe/<recipe_id>', methods=['PUT'])
 @token_required
 def update_recipe(current_user, recipe_id):
     recipe = Recipe.query.filter_by(id=recipe_id, user_id=current_user.id).first()
@@ -213,7 +207,7 @@ def update_recipe(current_user, recipe_id):
     return jsonify({'message': 'Recipe updated!'})
 
 
-@app.route('/api/recipe/<recipe_id>', methods=['DELETE'])
+@app.route('/recipe/<recipe_id>', methods=['DELETE'])
 @token_required
 def delete_recipe(current_user, recipe_id):
     recipe = Recipe.query.filter_by(id=recipe_id, user_id=current_user.id).first()
@@ -227,26 +221,26 @@ def delete_recipe(current_user, recipe_id):
     return jsonify({'message': 'Recipe deleted!'})
 
 
-@app.route('/api/login')
+@app.route('/login')
 def login():
     auth_data = request.authorization
 
     if not auth_data.username or not auth_data.password:
-        return make_response('Could not verify', 401, {'WWW-Authenticate': 'Basic realm="Login required!"'})
+        return make_response('Please insert data!', 401, {'WWW-Authenticate': 'Basic realm="Please insert data!"'})
 
     user = User.query.filter_by(username=auth_data.username).first()
 
     if not user:
-        return make_response('Could not verify', 401, {'WWW-Authenticate': 'Basic realm="No user found!"'})
+        return make_response('No user found!', 401, {'WWW-Authenticate': 'Basic realm="No user found!"'})
 
     if check_password_hash(user.password, auth_data.password):
         token = jwt.encode(
-            {'public_id': user.public_id, 'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=30)},
+            {'public_id': user.public_id, 'exp': datetime.datetime.utcnow() + datetime.timedelta(hours=2)},
             app.config['SECRET_KEY'])
 
         return jsonify({'token': token.decode('UTF-8')})
 
-    return make_response('Could not verify', 401, {'WWW-Authenticate': 'Basic realm="Login required!"'})
+    return make_response('Verify your credentials!', 401, {'WWW-Authenticate': 'Basic realm="Verify your credentials!"'})
 
 
 if __name__ == '__main__':
