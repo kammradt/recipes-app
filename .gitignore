@@ -1,5 +1,6 @@
 .idea/
 .vscode/
 recipes_venv/
+recipes_venv_flask/
 api/media/
 *.pyc
